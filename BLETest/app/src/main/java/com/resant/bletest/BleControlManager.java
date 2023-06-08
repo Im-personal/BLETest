@@ -2,5 +2,11 @@ package com.resant.bletest;
 
 
 interface BleControlManager {
-    boolean writeToRadio(String str);
+
+    void onDataRecived();
+    void onConnection();
+    void noBluetoothPermission(String bluetoothConnect);
+    void onRead(BLEConnection result);
+    void onReadFail();
+
 }
