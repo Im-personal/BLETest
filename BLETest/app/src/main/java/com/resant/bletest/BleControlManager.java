@@ -6,7 +6,7 @@ interface BleControlManager {
     void onDataRecived();
     void onConnection();
     void noBluetoothPermission(String bluetoothConnect);
-    void onRead(BLEConnection result);
+    void onRead(BluetoothData result);
     void onReadFail();
 
     void onDataWrite();

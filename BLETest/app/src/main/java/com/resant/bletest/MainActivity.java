@@ -9,7 +9,6 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -101,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onRead(BLEConnection result) {
-                int [] res = result.getData(new int[]{BLEConnection.UINT8_T,BLEConnection.UINT8_T,BLEConnection.UINT8_T});
+            public void onRead(BluetoothData result) {
+                int [] res = result.getData(new int[]{BluetoothData.UINT8_T,BluetoothData.UINT8_T,BluetoothData.UINT8_T});
                 setFields(res);
             }
 
