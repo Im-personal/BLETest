@@ -9,4 +9,7 @@ interface BleControlManager {
     void onRead(BLEConnection result);
     void onReadFail();
 
+    void onDataWrite();
+
+    void onConnectionFailed();
 }
