@@ -147,6 +147,25 @@ public class MainActivity extends AppCompatActivity {
             blec.readData(spinner.getSelectedItem().toString());
         });
 
+        findViewById(R.id.randomize).setOnClickListener(view ->
+        {
+            et1.setText((et1.getHint().toString().contains("32")?(""+(int)(Math.random()*100000)):(""+(int)(Math.random()*255))));
+            et2.setText((et2.getHint().toString().contains("32")?(""+(int)(Math.random()*100000)):(""+(int)(Math.random()*255))));
+            et3.setText((et3.getHint().toString().contains("32")?(""+(int)(Math.random()*100000)):(""+(int)(Math.random()*255))));
+            et4.setText((et4.getHint().toString().contains("32")?(""+(int)(Math.random()*100000)):(""+(int)(Math.random()*255))));
+            et5.setText((et5.getHint().toString().contains("32")?(""+(int)(Math.random()*100000)):(""+(int)(Math.random()*255))));
+        });
+
+        findViewById(R.id.clear).setOnClickListener(view ->
+        {
+            et1.setText("");
+            et2.setText("");
+            et3.setText("");
+            et4.setText("");
+            et5.setText("");
+        });
+
+
     }
 
     private EditText et1;
@@ -180,67 +199,69 @@ public class MainActivity extends AppCompatActivity {
 
         Log.println(Log.DEBUG,"REQUEST", Arrays.toString(grantResults));
 
+        if(blec!=null) blec.disconnect();
         blec = new BLEConnection(this, "0000babe-0000-1000-8000-00805f9b34fb", deviceName.getText().toString(), new BleControlManager() {
-            @Override
-            public void onDataRecived() {
-                runOnUiThread(()->Toast.makeText(context,"Data Recived", Toast.LENGTH_SHORT).show());
-            }
-
-            @Override
-            public void onConnection() {
-                runOnUiThread(()->Toast.makeText(context,"Connected!", Toast.LENGTH_SHORT).show());
-
-            }
-
-            @Override
-            public void noBluetoothPermission(String bluetoothConnect) {
-                //runOnUiThread(()->Toast.makeText(context,"No Permission", Toast.LENGTH_SHORT).show());
-            }
-
-            @Override
-            public void onRead(BluetoothData result) {
-                int [] res=new int[0]; ;
-
-                switch (spinner.getSelectedItem().toString())
-                {
-                    case "0000cafe-0000-1000-8000-00805f9b34fb":
-                        res = result.getData(new int[]{BluetoothData.UINT8_T,BluetoothData.UINT8_T,BluetoothData.UINT8_T});
-
-                        break;
-                    case "0000caff-0000-1000-8000-00805f9b34fb":
-                        res = result.getData(new int[]{BluetoothData.UINT8_T,BluetoothData.UINT8_T,BluetoothData.INT32_T,BluetoothData.INT32_T});
-                        break;
-                    case "0000cb00-0000-1000-8000-00805f9b34fb":
-                        res = result.getData(new int[]{BluetoothData.UINT8_T,BluetoothData.UINT8_T,BluetoothData.INT32_T,BluetoothData.INT32_T,BluetoothData.INT32_T});
-                        break;
+                @Override
+                public void onDataRecived() {
+                    runOnUiThread(()->Toast.makeText(context,"Data Recived", Toast.LENGTH_SHORT).show());
                 }
 
+                @Override
+                public void onConnection() {
+                    runOnUiThread(()->Toast.makeText(context,"Connected!", Toast.LENGTH_SHORT).show());
 
-                Log.println(Log.DEBUG,"dataforme", Arrays.toString(res));
-                setFields(res);
-            }
+                }
 
-            @Override
-            public void onReadFail() {
-                runOnUiThread(()->Toast.makeText(context,"ReadFail", Toast.LENGTH_SHORT).show());
-            }
+                @Override
+                public void noBluetoothPermission(String bluetoothConnect) {
+                    //runOnUiThread(()->Toast.makeText(context,"No Permission", Toast.LENGTH_SHORT).show());
+                }
 
-            @Override
-            public void onDataWrite() {
+                @Override
+                public void onRead(BluetoothData result) {
+                    int [] res=new int[0]; ;
 
-            }
+                    switch (spinner.getSelectedItem().toString())
+                    {
+                        case "0000cafe-0000-1000-8000-00805f9b34fb":
+                            res = result.getData(new int[]{BluetoothData.UINT8_T,BluetoothData.UINT8_T,BluetoothData.UINT8_T});
 
-            @Override
-            public void onConnectionFailed() {
-                Toast.makeText(context,"No Connection", Toast.LENGTH_SHORT).show();
-            }
+                            break;
+                        case "0000caff-0000-1000-8000-00805f9b34fb":
+                            res = result.getData(new int[]{BluetoothData.UINT8_T,BluetoothData.UINT8_T,BluetoothData.INT32_T,BluetoothData.INT32_T});
+                            break;
+                        case "0000cb00-0000-1000-8000-00805f9b34fb":
+                            res = result.getData(new int[]{BluetoothData.UINT8_T,BluetoothData.UINT8_T,BluetoothData.INT32_T,BluetoothData.INT32_T,BluetoothData.INT32_T});
+                            break;
+                    }
 
-            @Override
-            public void onDataWriteFail() {
-                Toast.makeText(context,"Property Write No Responce", Toast.LENGTH_SHORT).show();
-            }
-        });
 
+                    Log.println(Log.DEBUG,"dataforme", Arrays.toString(res));
+                    setFields(res);
+                }
+
+                @Override
+                public void onReadFail() {
+                    runOnUiThread(()->Toast.makeText(context,"ReadFail", Toast.LENGTH_SHORT).show());
+                }
+
+                @Override
+                public void onDataWrite() {
+                    Toast.makeText(context,"Wrote down", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onConnectionFailed() {
+                    Toast.makeText(context,"No Connection", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onDataWriteFail() {
+                    Toast.makeText(context,"Property Write No Responce", Toast.LENGTH_SHORT).show();
+                }
+            });
+        //else
+           // blec.discoverServices();
     }
 
 }

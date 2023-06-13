@@ -103,13 +103,20 @@ public class BLEConnection {
         this.context = context; // Сохранение контекста
         this.UUIDname = UUIDname;
 
-        //Проверка на сопряжение
-        if(!isTriedToConnect)
+
+
             initConnection(context, UUIDname); //   Подключение
-        else
-            gatt.discoverServices();
+
 
     }
+
+    @SuppressLint("MissingPermission")
+    public void discoverServices()
+    {
+        isReading=false;
+        gatt.discoverServices();
+    }
+
 
     //  При необходимости, можно заменить BleControlManager
     public void setBleControlManager(BleControlManager BCM) {
@@ -128,6 +135,7 @@ public class BLEConnection {
     //  Инициализация соединения
     @RequiresApi(api = Build.VERSION_CODES.S)
     private void initConnection(Context context, String UUIDname) {
+        isReading=false;
         //Свойства подключения - читать/писать
         int property = BluetoothGattCharacteristic.PROPERTY_WRITE | BluetoothGattCharacteristic.PROPERTY_READ;
         int permission = BluetoothGattCharacteristic.PERMISSION_WRITE | BluetoothGattCharacteristic.PERMISSION_READ;
@@ -150,6 +158,14 @@ public class BLEConnection {
         //   Интерфейс ответа на события
         BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
 
+
+
+            @Override
+            public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+                // handle characteristic changed notifications here
+                Log.d("dataforme","yeah kinda");
+                // do something with the value
+            }
 
             @Override
             public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
@@ -230,7 +246,7 @@ public class BLEConnection {
                 if (foundDevice.getName()!=null&&foundDevice.getName().equals(deviceName)) {//Если имя устройства совпадает с необходимым
                     device = foundDevice;
                     gatt = device.connectGatt(context, false, gattCallback);// Подключение к нему, сохранение его данных
-                    sleep(600);//Небольшое ожидание - необходимо для корректной работы discoverServices()
+                    sleep(300);//Небольшое ожидание - необходимо для корректной работы discoverServices()
                     isTriedToConnect=true;
                     gatt.discoverServices();
 
@@ -309,7 +325,7 @@ public class BLEConnection {
     //  Отправление данных
     @RequiresApi(api = Build.VERSION_CODES.S)
     public boolean writeData(String UUIDshare) {
-        isReading=false;
+        //isReading=false;
         BluetoothGattService service = gatt.getService(UUID.fromString(UUIDname)); //  Получение сервиса
 
         byte[] data = new byte[dataAL.size()];
@@ -353,6 +369,11 @@ public class BLEConnection {
     }
 
 
+    @SuppressLint("MissingPermission")
+    public void disconnect()
+    {
+        gatt.disconnect();
+    }
 
 
 }
