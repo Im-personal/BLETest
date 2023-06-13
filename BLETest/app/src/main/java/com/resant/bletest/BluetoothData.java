@@ -1,5 +1,7 @@
 package com.resant.bletest;
 
+import android.util.Log;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -37,6 +39,7 @@ public class BluetoothData {
             switch (type)
             {
                 case INT32_T:
+                    Log.println(Log.DEBUG,"dataforme",""+buffer.remaining());
                     res[i] = buffer.getInt();
                     break;
 

@@ -12,4 +12,6 @@ interface BleControlManager {
     void onDataWrite();
 
     void onConnectionFailed();
+
+    void onDataWriteFail();
 }
