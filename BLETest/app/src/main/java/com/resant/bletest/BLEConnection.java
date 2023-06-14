@@ -344,11 +344,13 @@ public class BLEConnection {
         if(gatt.writeCharacteristic(chara))
         {
             BCM.onDataWrite();
+            dataAL.clear();
             return true;
         }
         else
         {
             BCM.onDataWriteFail();
+            dataAL.clear();
             return false;
         }
     }
