@@ -374,7 +374,8 @@ public class BLEConnection {
     @SuppressLint("MissingPermission")
     public void disconnect()
     {
-        gatt.disconnect();
+        if(gatt!=null)
+            gatt.disconnect();
     }
 
 

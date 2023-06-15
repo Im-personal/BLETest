@@ -101,8 +101,11 @@ public class MainActivity extends AppCompatActivity {
 
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.BLUETOOTH,
+                            android.Manifest.permission.ACCESS_FINE_LOCATION,
                             android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                            android.Manifest.permission.BLUETOOTH_CONNECT},
+                            android.Manifest.permission.BLUETOOTH_CONNECT,
+                            android.Manifest.permission.BLUETOOTH_SCAN,
+                            android.Manifest.permission.BLUETOOTH_ADVERTISE},
                         1);
 
             });
