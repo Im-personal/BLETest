@@ -14,4 +14,6 @@ interface BleControlManager {
     void onConnectionFailed();
 
     void onDataWriteFail();
+
+    void onDeviceNotFound();
 }

@@ -244,22 +244,29 @@ public class BLEConnection {
             public void onScanResult(int callbackType, ScanResult result) {
                 BluetoothDevice foundDevice = result.getDevice();
                 if (foundDevice.getName()!=null&&foundDevice.getName().equals(deviceName)) {//Если имя устройства совпадает с необходимым
+                    found=true;
                     device = foundDevice;
                     gatt = device.connectGatt(context, false, gattCallback);// Подключение к нему, сохранение его данных
                     sleep(300);//Небольшое ожидание - необходимо для корректной работы discoverServices()
                     isTriedToConnect=true;
                     gatt.discoverServices();
-
                     scanner.stopScan(this); // Останавливаем сканирование
                 }
-
-
             }
         };
 
+        found=false;
+        new Thread(() -> {//Принудительная остановка
+            sleep(2000);
+            if(!found) {//В случае, если не найдено
+                scanner.stopScan(scanCallback);
+                BCM.onDeviceNotFound();
+            }
+        }).start();
         scanner.startScan(scanCallback);
 
     }
+    boolean found = false;
 
 
     //  Проверка на сопряжение

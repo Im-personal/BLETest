@@ -262,7 +262,12 @@ public class MainActivity extends AppCompatActivity {
                 public void onDataWriteFail() {
                     Toast.makeText(context,"Property Write No Responce", Toast.LENGTH_SHORT).show();
                 }
-            });
+
+            @Override
+            public void onDeviceNotFound() {
+                Toast.makeText(context,"Device not found after 2000ms", Toast.LENGTH_SHORT).show();
+            }
+        });
         //else
            // blec.discoverServices();
     }
